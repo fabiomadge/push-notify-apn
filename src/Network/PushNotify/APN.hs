@@ -458,10 +458,15 @@ newConnection aci = do
             , clientShared=shared
             , clientHooks=def
                 { onCertificateRequest=const . return . Just $ credential }
-            , clientDebug=DebugParams { debugSeed=Nothing, debugPrintSeed=const $ return () }
             , clientSupported=def
                 { supportedVersions=[ TLS12 ]
                 , supportedCiphers=ciphersuite_strong }
+            , clientDebug=DebugParams
+                { debugSeed=Nothing
+                , debugPrintSeed=const $ return ()
+                , debugVersionForced=Nothing
+                , debugKeyLogger=const $ return () }
+            , clientEarlyData=Nothing
             }
 
         conf = [ (HTTP2.SettingsMaxFrameSize, 16384)
