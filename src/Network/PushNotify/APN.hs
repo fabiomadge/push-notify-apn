@@ -440,7 +440,10 @@ checkCertificates :: ApnConnectionInfo -> IO Bool
 checkCertificates aci = do
     castore <- readCertificateStore $ aciCaPath aci
     credential <- credentialLoadX509 (aciCertPath aci) (aciCertKey aci)
-    return $ isJust castore && isRight credential
+    return $ isJust castore && check credential
+  where
+    check (Right (CertificateChain (_:_), _)) = True
+    check _ = False
 
 newConnection :: ApnConnectionInfo -> IO ApnConnection
 newConnection aci = do
